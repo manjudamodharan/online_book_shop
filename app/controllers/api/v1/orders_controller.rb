@@ -4,7 +4,7 @@ module Api
       before_action :set_page, only: [:index]
 
       def index
-        orders = Order.all.order(:user_id).limit(10).offset(@page * 10)
+        orders = Order.all.order(:status).limit(10).offset(@page * 10)
         render json: orders
       end
 
@@ -14,23 +14,18 @@ module Api
         if order.save
           render json: order
         else
-          render json: {"error": "could not create"}
+          render json: {"error": "Could not create"}
         end
       end
 
       def show
-        order = Order.find(params[:id])
+        order = Order.find_order(params)
         render json: order
       end
 
-      def update
-        order = Order.find(params[:id])
-        order.update(copies: params[:copies])
-      end
-
       def destroy
-        order = Order.find(params[:id])
-        order.update(status: 'cancelled')
+        order = Order.find_order(params)
+        order.update(status: 1)
       end
 
 

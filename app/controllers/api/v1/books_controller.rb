@@ -9,7 +9,7 @@ module Api
       end
 
       def show
-        book = Book.find(params[:id])
+        book = Book.find_order(params)
         render json: book
       end
 
@@ -23,19 +23,19 @@ module Api
       end
 
       def update
-        book = Book.find(params[:id])
+        book = Book.find_order(params)
         book.update(available_copies: params[:available_copies])
       end
 
       def destroy
-        book = Book.find(params[:id])
+        book = Book.find_order(params)
         book.update(is_deleted: 1)
-        book.destroy
       end
 
       def order_history
         order_history = Book.includes(:orders).where(id: params[:id])
-        render json: order_history
+        book_orders = order_history.map(&:orders)
+        render json: book_orders
       end
 
       private
@@ -57,6 +57,8 @@ module Api
 
       def allowded_search_attributes
         provided_search_attr = params[:books]
+        return {} unless provided_search_attr.present?
+
         @operatable_fields = {
           name: provided_search_attr[:name],
           author: provided_search_attr[:author]

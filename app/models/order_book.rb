@@ -1,4 +1,4 @@
 class OrderBook < ApplicationRecord
-  belongs_to :books
-  belongs_to :orders
+  belongs_to :book
+  belongs_to :order
 end

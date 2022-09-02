@@ -8,7 +8,7 @@ class CreateOrders < ActiveRecord::Migration[7.0]
       t.text :comments
       t.string :invoice_number
       t.float :total_charge
-      t.integer :status
+      t.integer :status, default: 0
 
       t.timestamps
     end

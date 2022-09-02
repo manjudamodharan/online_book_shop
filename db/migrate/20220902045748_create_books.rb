@@ -6,6 +6,7 @@ class CreateBooks < ActiveRecord::Migration[7.0]
       t.string :author
       t.date :year
       t.integer :available_copies
+      t.boolean :is_deleted, default: 0
 
       t.timestamps
     end
