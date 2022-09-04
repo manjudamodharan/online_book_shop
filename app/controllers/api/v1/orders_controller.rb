@@ -3,12 +3,13 @@ module Api
     class OrdersController < ApplicationController
       before_action :set_page, only: [:index]
 
+      # GET /api/v1/orders
       def index
         orders = Order.all.order(:status).limit(10).offset(@page * 10)
         render json: orders
       end
 
-
+      # POST /api/v1/orders
       def create
         order = Order.new(order_params)
         if order.save
@@ -18,11 +19,13 @@ module Api
         end
       end
 
+      # GET /api/v1/orders/1
       def show
         order = Order.find_order(params)
         render json: order
       end
 
+      # DELETE /api/v1/orders/1
       def destroy
         order = Order.find_order(params)
         order.update(status: 1)

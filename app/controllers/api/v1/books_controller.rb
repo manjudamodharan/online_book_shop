@@ -3,16 +3,19 @@ module Api
     class BooksController < ApplicationController
       before_action :set_page, only: [:index]
 
+      # GET /api/v1/books
       def index
         books = Book.where(allowded_search_attributes).order(sorting_condition).limit(10).offset(@page * 10)
         render json: books
       end
 
+      # GET /api/v1/books/1
       def show
         book = Book.find_order(params)
         render json: book
       end
 
+      # POST /api/v1/books
       def create
         book = Book.new(book_params)
         if book.save
@@ -22,16 +25,19 @@ module Api
         end
       end
 
+      # PUT /api/v1/books/1
       def update
         book = Book.find_order(params)
         book.update(available_copies: params[:available_copies])
       end
 
+      # DELETE /api/v1/books/1
       def destroy
         book = Book.find_order(params)
         book.update(is_deleted: 1)
       end
 
+      #GET  /api/v1/books/1/order_history
       def order_history
         order_history = Book.includes(:orders).where(id: params[:id])
         book_orders = order_history.map(&:orders)
